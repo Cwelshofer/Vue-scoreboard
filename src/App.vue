@@ -1,28 +1,69 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js App" />
+    <div id="team">
+      <matchup-title :team1="team1" :team2="team2"></matchup-title>
+    </div>
+    <game-status :team1="team1" :team2="team2"></game-status>
+    <div class="scores">
+      <scorecard
+        :score="team1.score"
+        @pointAdded="updateTeamScore(team1, 1)"
+        @pointSubtracted="updateTeamScore(team1, -1)"
+      ></scorecard>
+      <scorecard
+        :score="team2.score"
+        @pointAdded="updateTeamScore(team2, 1)"
+        @pointSubtracted="updateTeamScore(team2, -1)"
+      ></scorecard>
+    </div>
   </div>
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld.vue";
-
+import GameStatus from "./components/GameStatus.vue";
+import MatchupTitle from "./components/MatchupTitle.vue";
+import Scorecard from "./components/Scorecard.vue";
 export default {
-  name: "App",
-  components: {
-    HelloWorld
+  components: { MatchupTitle, Scorecard, GameStatus },
+  data() {
+    return {
+      team1: {
+        name: "Team 1",
+        score: 0
+      },
+      team2: {
+        name: "Team 2",
+        score: 0
+      }
+    };
+  },
+  methods: {
+    updateTeamScore(team, points) {
+      const updated = team.score + points;
+      if (updated >= 0) {
+        team.score = updated;
+      }
+    }
   }
 };
 </script>
 
 <style>
+body {
+  background-color: blue;
+}
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  color: white;
+}
+
+#team {
+  outline: 20px green;
+  border: 2px solid black;
+}
+
+.scores {
+  display: flex;
+  justify-content: space-evenly;
 }
 </style>
